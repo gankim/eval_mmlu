@@ -7,7 +7,7 @@ import time
 
 from crop import crop
 
-openai.api_key = "INSERTYOURKEYHERE"
+openai.api_key = # OpenAI API
 choices = ["A", "B", "C", "D"]
 
 
@@ -61,6 +61,7 @@ def eval(args, subject, engine, dev_df, test_df):
             prompt = train_prompt + prompt_end
 
         label = test_df.iloc[i, test_df.shape[1]-1]
+        import pdb ; pdb.set_trace()
 
         while True:
             try:

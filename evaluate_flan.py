@@ -184,7 +184,7 @@ if __name__ == "__main__":
         "--model",
         "-m",
         type=str,
-        default="google/flan-t5-small",
+        default="google/flan-t5-large",
     )
     args = parser.parse_args()
     main(args)

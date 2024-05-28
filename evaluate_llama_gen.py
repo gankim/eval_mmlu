@@ -124,13 +124,15 @@ def format_subject(subject):
         s += " " + entry
     return s
 
-def format_example(df, idx, include_answer=True, cot=True):
+def format_example(df, idx, include_answer=True, rationale=""):
     prompt = df.iloc[idx, 0]
     k = df.shape[1] - 2
     for j in range(k):
         prompt += "\n{}. {}".format(choices[j], df.iloc[idx, j+1])
-    if cot:
+    if rationale == "cot":
         prompt += "\nRationale:\n" + "Let's think step by step.\n"
+    elif rationale == "decomp":
+        prompt += "\nDecomposition:\nDQ_1:"
     else:
         prompt += "\nAnswer:"
     if include_answer:
@@ -278,7 +280,7 @@ def main(ckpt_dir: str, model_type: str, save_dir: str):
         for i in range(test_df.shape[0]):
             # get prompt and make sure it fits
             k = args.ntrain
-            prompt_end = format_example(test_df, i, include_answer=False)
+            prompt_end = format_example(test_df, i, include_answer=False, rationale=args.rationale)
             train_prompt = gen_prompt(dev_df, task, k)
             prompt = train_prompt
             if args.ntrain > 0:
@@ -331,6 +333,7 @@ if __name__ == "__main__":
     parser.add_argument('--wandb_project_name', type=str, default='MMLU_Llama2')
     parser.add_argument('--wandb_run_name', type=str, default='test')
     parser.add_argument('--target_tasks', type=str, default='')
+    parser.add_argument('--rationale', type=str, default='', help="cot/decomp")
     parser.add_argument('--debug', action='store_true')
     
     args = parser.parse_args()
